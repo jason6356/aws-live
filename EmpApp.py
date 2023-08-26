@@ -49,7 +49,9 @@ def addStudent():
     if isEc2Instance is False:
         print("Local Development Environment, Skipping Uploading to S3")
     else:
-        uploadPDF(progress_report)
+        uploadSuccess = uploadPDF(progress_report, student_id)
+        if uploadSuccess is False:
+            return render_template('error.html', error_msg='There is problem with S3, Please SSH Into your Instances to Check it Out')
 
     return render_template('AddEmpOutput.html', name= 'sub')
 
@@ -86,6 +88,7 @@ def uploadToS3(file_name, file_content):
             custombucket,
             file_name)
 
+        print(f'Success, Uploaded File Object URL {object_url}')
         return True
     except Exception as e:
         print(str(e))
