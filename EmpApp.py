@@ -20,10 +20,100 @@ db_conn = connections.Connection(
 output = {}
 table = 'employee'
 
-
 @app.route("/", methods=['GET', 'POST'])
 def home():
-    return render_template('AddEmp.html')
+    return render_template('addStudent.html')
+
+@app.route("/addStudent", methods=['POST'])
+def addStudent():
+
+    student_id = request.form['student_id']
+    progress_report = request.files['progress_report']
+
+    print(progress_report.content_type)
+
+    # Validation to ensure there is no empty file
+    if progress_report.filename == '':
+        return 'Please Insert A File'
+
+    file_extension = getFileExtension(progress_report.filename)
+    print(file_extension)
+
+    insertSuccess = insertIntoMariaDB(request)
+
+    if insertSuccess is False:
+        return render_template('error.html', error_msg='Unable to insert into MariaDB')
+
+    print('Done Inserting into MariaDB, now Uploading to S3')
+
+    if isEc2Instance is False:
+        print("Local Development Environment, Skipping Uploading to S3")
+    else:
+        uploadPDF(progress_report)
+
+    return render_template('AddEmpOutput.html', name= 'sub')
+
+def getFileExtension(file):
+    return os.path.splitext(file)[1]
+
+def uploadImage(image_to_upload, student_id):
+    print("Uploading Image Into S3 Bucket")
+    file_extension = getFileExtension(image_to_upload.filename)
+    file_name = student_id + file_extension
+    return uploadToS3(file_name, image_to_upload)
+
+def uploadPDF(pdf_to_upload, student_id):
+    print("Uploading PDF into S3 Bucket")
+    file_extension = getFileExtension(pdf_to_upload.filename)
+    file_name = student_id + file_extension
+    return uploadToS3(file_name, pdf_to_upload)
+
+def uploadToS3(file_name, file_content):
+
+    try:
+        s3 = boto3.resource('s3')
+        s3.Bucket(custombucket).put_object(Key=file_name, Body=file_content)
+        bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
+        s3_location = (bucket_location['LocationConstraint'])
+
+        if s3_location is None:
+            s3_location = ''
+        else:
+            s3_location = '-' + s3_location
+
+        object_url = "https://s3{0}.amazonaws.com/{1}/{2}".format(
+            s3_location,
+            custombucket,
+            file_name)
+
+        return True
+    except Exception as e:
+        print(str(e))
+        return False
+
+def insertIntoMariaDB(request):
+    print("Updating Database for Maria DB")
+    student_id = request.form['student_id']
+    student_name = request.form['student_name']
+    student_nric = request.form['student_nric']
+    student_gender = request.form['student_gender']
+    student_programme = request.form['student_programme']
+    student_mobile = request.form['mobile_number']
+
+    insert_sql = "INSERT INTO student VALUES(%s, %s, %s, %s, %s, %s)"
+    cursor = db_conn.cursor()
+
+    try:
+        cursor.execute(insert_sql, (student_id, student_name, student_nric, student_gender, student_programme,student_mobile))
+        db_conn.commit()
+        print("Successfully Uploading into Database")
+        cursor.close()
+        return True
+
+    except Exception as e:
+        cursor.close()
+        print(str(e))
+        return False
 
 
 @app.route("/about", methods=['POST'])
