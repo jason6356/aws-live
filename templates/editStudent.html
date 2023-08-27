@@ -7,7 +7,7 @@
   </head>
   <body class="bg-gray-200">
     <!-- Easy Navigation Bar -->
-    <nav class="bg-gray-900 flex justify-between">
+    <nav class="bg-white flex justify-between">
       <div
         class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4"
       >
@@ -17,8 +17,7 @@
             class="h-8 mr-3"
             alt="TARUMT Logo"
           />
-          <span
-            class="self-center text-2xl text-white font-semibold whitespace-nowrap"
+          <span class="self-center text-2xl font-semibold whitespace-nowrap"
             >TARUMT Internship Dashboard</span
           >
         </a>
@@ -31,12 +30,12 @@
       <div class="w-full max-w-lg mt-10">
         <form
           class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
-          action="/addStudent"
+          action="/editStudent"
           autocomplete="on"
           method="POST"
           enctype="multipart/form-data"
         >
-          <h1 class="text-2xl font-semibold">Add Student</h1>
+          <h1 class="text-2xl font-semibold">Edit Student</h1>
           <div class="mt-3">
             <label
               class="block text-gray-700 text-sm font-bold mb-2"
@@ -49,6 +48,7 @@
               type="text"
               name="student_id"
               placeholder="Student ID"
+              value="{{data[0]}}"
             />
           </div>
           <div class="mt-6">
@@ -63,6 +63,7 @@
               type="text"
               name="student_name"
               placeholder="Student Name"
+              value="{{data[1]}}"
             />
           </div>
           <div class="mt-6">
@@ -77,6 +78,7 @@
               type="text"
               name="student_nric"
               placeholder="NRIC"
+              value="{{data[2]}}"
             />
           </div>
           <div class="mt-6">
@@ -115,8 +117,8 @@
             <input
               type="email"
               placeholder="Email"
-              name="student_email"
               class="shadow w-full py-3 px-2 text-gray-700"
+              value="{{data[5]}}"
             />
           </div>
 
@@ -129,6 +131,7 @@
               placeholder="01X-XXXX-XXX"
               name="mobile_number"
               class="shadow w-full py-3 px-2 text-gray-700"
+              value="{{data[6]}}"
             />
           </div>
 
@@ -151,7 +154,7 @@
               type="submit"
               class="text-white bg-blue-400 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2"
             >
-              Add Student
+              Edit Student
             </button>
           </div>
         </form>

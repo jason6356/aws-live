@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from pymysql import connections
 import os
 import boto3
@@ -22,9 +22,50 @@ table = 'employee'
 
 print('hello world')
 
+
 @app.route("/", methods=['GET', 'POST'])
 def home():
+    getAll_sql = 'SELECT * FROM studentDetails'
+    cursor = db_conn.cursor()
+    cursor.execute(getAll_sql)
+    results = cursor.fetchall()
+    print(results)
+    return render_template('adminDashboard.html', studentList = results)
+
+@app.route("/addStudent", methods=['GET'])
+def renderAddStudent():
     return render_template('addStudent.html')
+
+@app.route("/editStudent", methods=['GET'])
+def renderEditStudent():
+    student_id = request.args['student_id']
+    student_name = request.args['student_name']
+    student_nric = request.args['student_nric']
+    student_gender = request.args['student_gender']
+    student_programme = request.args['student_programme']
+    student_email = request.args['student_email']
+    student_mobile = request.args['mobile_number']
+
+    rowData = [student_id, student_name, student_nric, student_gender, student_programme, student_email,student_mobile]
+    
+    pdf_url = "https://{0}.s3.amazonaws.com/{1}.pdf".format(custombucket,student_id)
+    image_url = "https://{0}.s3.amazonaws.com/{1}.png".format(custombucket,student_id)
+
+    return render_template('editStudent.html', data=rowData,image_url =image_url, report_url=pdf_url)
+
+@app.route("/getStudentDetails", methods=['GET'])
+def getStudent():
+    student_id = request.args.get('student_id')
+    get_sql = 'SELECT * FROM studentDetails WHERE student_id = %s'
+    cursor = db_conn.cursor()
+    cursor.execute(get_sql, student_id)
+    results = cursor.fetchone()
+
+    pdf_url = "https://{0}.s3.amazonaws.com/{1}.pdf".format(custombucket,student_id)
+    image_url = "https://{0}.s3.amazonaws.com/{1}.png".format(custombucket,student_id)
+
+    return render_template('studentDetails.html', data=results,image_url =image_url, report_url=pdf_url)
+
 
 @app.route("/addStudent", methods=['POST'])
 def addStudent():
@@ -103,13 +144,14 @@ def insertIntoMariaDB(request):
     student_nric = request.form['student_nric']
     student_gender = request.form['student_gender']
     student_programme = request.form['student_programme']
+    student_email = request.form['student_email']
     student_mobile = request.form['mobile_number']
 
-    insert_sql = "INSERT INTO student VALUES(%s, %s, %s, %s, %s, %s)"
+    insert_sql = "INSERT INTO studentDetails VALUES(%s, %s, %s, %s, %s, %s, %s)"
     cursor = db_conn.cursor()
 
     try:
-        cursor.execute(insert_sql, (student_id, student_name, student_nric, student_gender, student_programme,student_mobile))
+        cursor.execute(insert_sql, (student_id, student_name, student_nric, student_gender, student_programme,student_email, student_mobile))
         db_conn.commit()
         print("Successfully Uploading into Database")
         cursor.close()

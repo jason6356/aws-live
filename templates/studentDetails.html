@@ -1,0 +1,84 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Student Details</title>
+  </head>
+  <body class="bg-gray-100">
+    <!-- Easy Navigation Bar -->
+    <nav class="bg-gray-900 flex justify-between">
+      <div
+        class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4"
+      >
+        <a href="https://www.tarc.edu.my/" class="flex items-center">
+          <img
+            src="{{url_for('static', filename='logo.png')}}"
+            class="h-8 mr-3"
+            alt="TARUMT Logo"
+          />
+          <span
+            class="self-center text-2xl font-semibold whitespace-nowrap text-white"
+            >TARUMT Internship Dashboard</span
+          >
+        </a>
+      </div>
+    </nav>
+
+    <div class="flex flex-col items-center">
+      <img src="{{image_url}}" class="w-80 h-80 mt-5" alt="Profile Image" />
+
+      <div
+        class="mt-10 w-10/12 flow-root rounded-lg border border-gray-100 py-3 shadow-sm bg-white"
+      >
+        <dl class="-my-3 divide-y divide-gray-100 text-sm">
+          <div class="grid grid-cols-1 gap-1 p-3 sm:grid-cols-3 sm:gap-4">
+            <dt class="font-medium text-gray-900">Student ID</dt>
+            <dd class="text-gray-700 sm:col-span-2">{{data[0]}}</dd>
+          </div>
+
+          <div class="grid grid-cols-1 gap-1 p-3 sm:grid-cols-3 sm:gap-4">
+            <dt class="font-medium text-gray-900">Student Name</dt>
+            <dd class="text-gray-700 sm:col-span-2">{{data[1]}}</dd>
+          </div>
+
+          <div class="grid grid-cols-1 gap-1 p-3 sm:grid-cols-3 sm:gap-4">
+            <dt class="font-medium text-gray-900">Student NRIC</dt>
+            <dd class="text-gray-700 sm:col-span-2">{{data[2]}}</dd>
+          </div>
+
+          <div class="grid grid-cols-1 gap-1 p-3 sm:grid-cols-3 sm:gap-4">
+            <dt class="font-medium text-gray-900">Student Gender</dt>
+            <dd class="text-gray-700 sm:col-span-2">{{data[3]}}</dd>
+          </div>
+
+          <div class="grid grid-cols-1 gap-1 p-3 sm:grid-cols-3 sm:gap-4">
+            <dt class="font-medium text-gray-900">Student Programme</dt>
+            <dd class="text-gray-700 sm:col-span-2">{{data[4]}}</dd>
+          </div>
+
+          <div class="grid grid-cols-1 gap-1 p-3 sm:grid-cols-3 sm:gap-4">
+            <dt class="font-medium text-gray-900">Student Email</dt>
+            <dd class="text-gray-700 sm:col-span-2">{{data[5]}}</dd>
+          </div>
+
+          <div class="grid grid-cols-1 gap-1 p-3 sm:grid-cols-3 sm:gap-4">
+            <dt class="font-medium text-gray-900">Contact Number</dt>
+            <dd class="text-gray-700 sm:col-span-2">{{data[6]}}</dd>
+          </div>
+
+          <div class="grid grid-cols-1 gap-1 p-3 sm:grid-cols-3 sm:gap-4">
+            <dt class="font-medium text-gray-900">Progress Report</dt>
+            <dd class="text-gray-700 sm:col-span-2">
+              <a
+                href="{{report_url}}"
+                class="block w-fit rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-indigo-700 focus:outline-none focus:ring"
+                >View</a
+              >
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </body>
+</html>

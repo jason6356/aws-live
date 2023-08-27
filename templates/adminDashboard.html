@@ -1,0 +1,159 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Internship System</title>
+  </head>
+  <body class="bg-gray-100">
+
+    <!-- Easy Navigation Bar -->
+    <nav
+      class="bg-gray-900 flex justify-between"
+    >
+      <div
+        class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4"
+      >
+        <a href="https://www.tarc.edu.my/" class="flex items-center">
+          <img src="{{url_for('static', filename='logo.png')}}" class="h-8 mr-3" alt="TARUMT Logo" />
+          <span
+            class="self-center text-2xl font-semibold text-white whitespace-nowrap"
+            >TARUMT Internship Dashboard</span
+          >
+        </a>
+        </div>
+    </nav>
+
+    <!-- Right Side Content-->
+    <div class="flex-1 bg-gray-100 p-4 border-r-4">
+      <header class="bg-gray-50">
+        <div class="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
+          <div class="sm:flex sm:items-center sm:justify-between">
+            <div class="text-center sm:text-left">
+              <h1 class="text-2xl font-bold text-gray-900 sm:text-3xl">
+                Welcome Back, Sir!
+              </h1>
+            </div>
+
+            <div
+              class="mt-4 flex flex-col gap-4 sm:mt-0 sm:flex-row sm:items-center"
+            >
+              <a
+                class="block rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-indigo-700 focus:outline-none focus:ring"
+                type="button"
+                href="{{url_for('addStudent')}}"
+              >
+                Add Student
+        </a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Table of All Students -->
+      <div class="overflow-x-auto">
+        <table
+          class="w-full divide-y-2 divide-gray-200 bg-white text-sm mt-5 rounded-lg shadow"
+        >
+          <thead class="ltr:text-left rtl:text-right">
+            <tr>
+              <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                Student ID
+              </th>
+              <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                Name
+              </th>
+              <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                NRIC
+              </th>
+              <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                Gender
+              </th>
+              <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                Programme
+              </th>
+              <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                Email
+              </th>
+              <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                Contact Number
+              </th>
+              <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                Action
+              </th>
+            </tr>
+          </thead>
+
+          <tbody class="divide-y divide-gray-200">
+            {% for row in studentList %}
+            <tr>
+              <td
+                class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 text-center"
+              >
+                {{row[0]}}
+              </td>
+              <td
+                class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 text-center"
+              >
+                {{row[1]}}
+              </td>
+              <td class="whitespace-nowrap px-4 py-2 text-gray-700 text-center">
+                {{row[2]}}
+              </td>
+              <td class="whitespace-nowrap px-4 py-2 text-gray-700 text-center">
+                {{row[3]}}
+              </td>
+              <td class="whitespace-nowrap px-4 py-2 text-gray-700 text-center">
+                {{row[4]}}
+              </td>
+              <td class="whitespace-nowrap px-4 py-2 text-gray-700 text-center">
+                {{row[5]}}
+              </td>
+              <td class="whitespace-nowrap px-4 py-2 text-gray-700 text-center">
+                {{row[6]}}
+              </td>
+              <td class="whitespace-nowrap px-4 py-2 text-center">
+                <button
+                  class="inline-block rounded bg-green-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-700"
+                  onclick="viewStudent('{{ row[0] }}')"
+                >
+                  View
+              </button>
+                <button
+                  onclick="editStudent('{{ row[0] }}', '{{ row[1] }}', '{{ row[2] }}', '{{ row[3] }}', '{{ row[4] }}', '{{ row[5] }}', '{{row[6]}}')"
+                  class="inline-block rounded bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-700"
+                >
+                  Edit
+                </button>
+                <a
+                  href="#"
+                  class="inline-block rounded bg-red-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-700"
+                >
+                  Delete
+                </a>
+              </td>
+            </tr>
+            {% endfor %}
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <!-- Main modal -->
+      </div>
+    </div>
+  </body>
+  <script>
+    function viewStudent(studentId) {
+        var url = "/getStudentDetails?student_id=" + encodeURIComponent(studentId)
+
+        window.location.href= url;
+    }
+    function editStudent(studentId, studentName, studentNric, studentGender, student_programme,student_email,mobile_number){
+        url=`editStudent?student_id=${studentId}&student_name=${encodeURIComponent(studentName)}&student_nric=${studentNric}&student_gender=${studentGender}&student_programme=${student_programme}&student_email=${student_email}&mobile_number=${mobile_number}`
+        window.location.href = url;
+    }
+  </script>
+</html>
