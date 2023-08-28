@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect
 from pymysql import connections
 import os
 import boto3
@@ -25,11 +25,15 @@ print('hello world')
 
 @app.route("/", methods=['GET', 'POST'])
 def home():
-    getAll_sql = 'SELECT * FROM studentDetails'
-    cursor = db_conn.cursor()
-    cursor.execute(getAll_sql)
-    results = cursor.fetchall()
-    print(results)
+    try:
+        getAll_sql = 'SELECT * FROM studentDetails'
+        cursor = db_conn.cursor()
+        cursor.execute(getAll_sql)
+        results = cursor.fetchall()
+        print(results)
+    except Exception as e:
+        return render_template('error.html', error_msg=str(e))
+
     return render_template('adminDashboard.html', studentList = results)
 
 @app.route("/addStudent", methods=['GET'])
@@ -52,6 +56,47 @@ def renderEditStudent():
     image_url = "https://{0}.s3.amazonaws.com/{1}.png".format(custombucket,student_id)
 
     return render_template('editStudent.html', data=rowData,image_url =image_url, report_url=pdf_url)
+
+@app.route("/deleteStudent", methods=['POST'])
+def deleteStudent():
+    student_id = request.form['student_id']
+    delete_sql = "DELETE FROM studentDetails WHERE student_id = %s"
+    cursor = db_conn.cursor()
+
+    try:
+        cursor.execute(delete_sql, student_id)
+        db_conn.commit()
+        print("Successfully Deleted From Database")
+        cursor.close()
+        return redirect("/")
+    except Exception as e:
+        cursor.close()
+        return render_template('error.html', error_msg='Unable to Delete From MariaDB')
+
+
+
+@app.route("/editStudent", methods = ['POST'])
+def updateStudent():
+    student_id = request.form['student_id']
+    student_name = request.form['student_name']
+    student_nric = request.form['student_nric']
+    student_gender = request.form['student_gender']
+    student_programme = request.form['student_programme']
+    student_email = request.form['student_email']
+    student_mobile = request.form['mobile_number']
+
+    update_sql = "UPDATE studentDetails SET student_name = %s, student_nric = %s, student_gender = %s, student_programme = %s, student_email = %s, mobile_number = %s WHERE student_id = %s"
+    cursor = db_conn.cursor()
+
+    try:
+        cursor.execute(update_sql, (student_name, student_nric, student_gender, student_programme,student_email, student_mobile, student_id))
+        db_conn.commit()
+        print("Successfully Updated the Database")
+        cursor.close()
+        return redirect('/')
+    except Exception as e:
+        cursor.close()
+        return render_template('error.html', error_msg='Unable to Update into MariaDB')
 
 @app.route("/getStudentDetails", methods=['GET'])
 def getStudent():
@@ -96,7 +141,7 @@ def addStudent():
         if uploadSuccess is False:
             return render_template('error.html', error_msg='There is problem with S3, Please SSH Into your Instances to Check it Out')
 
-    return render_template('AddEmpOutput.html', name= 'sub')
+    return redirect('/')
 
 def getFileExtension(file):
     return os.path.splitext(file)[1]

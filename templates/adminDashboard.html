@@ -125,12 +125,12 @@
                 >
                   Edit
                 </button>
-                <a
-                  href="#"
+                <button
+                  onclick="deleteStudent('{{row[0]}}')"
                   class="inline-block rounded bg-red-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-700"
                 >
                   Delete
-                </a>
+              </button>
               </td>
             </tr>
             {% endfor %}
@@ -146,6 +146,26 @@
     </div>
   </body>
   <script>
+
+    function deleteStudent(student_id){
+      var result = confirm(`Are you sure to delete ? ID : ${student_id}`)
+      if(result){
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', "/deleteStudent")
+        const formData = new FormData()
+        formData.append("student_id", student_id)
+        xhr.onload = function() {
+          if (this.status === 200) {
+            alert("Successfully Deleted")
+            location.reload();
+          } else {
+            alert("Failed")
+          }
+        };
+        xhr.send(formData)
+      } 
+    }
+
     function viewStudent(studentId) {
         var url = "/getStudentDetails?student_id=" + encodeURIComponent(studentId)
 
