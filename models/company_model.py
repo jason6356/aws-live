@@ -1,5 +1,5 @@
 from services.database_service import get_database_connection
-from services.s3_service import uploadToS3
+from services.s3_service import uploadToS3, get_object_url
 
 #INSERT INTO Company VALUES ("C0001","Sainoforce", "www.google.com", "Wong Jeng Liang", "018-388-7670", "sainoforce@gmail.com", "sainoforce123", "requested");
 def add_company(data):
@@ -11,18 +11,24 @@ def add_company(data):
     contact_number = data.form['contact_number']
     company_email = data.form['company_email']
     company_password = data.form['company_password']
+    company_address = data.form['company_address']
     cert = data.files['cert']
+    logo = data.files['logo']
     register_status = 'requested'
 
-    insert_sql = "INSERT INTO Company VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"
+    insert_sql = "INSERT INTO Company VALUES (%s,%s,%s,%s,%s,%s,%s,%s, %s, %s, %s)"
     cursor = connection.cursor()
-
+    certPath = f"companies/{company_id}/cert.pdf"
+    logoPath = f"companies/{company_id}/logo.png"
+    uploadToS3(cert, certPath)
+    uploadToS3(logo, logoPath)
+    cert_obj_url = get_object_url(certPath)
+    logo_obj_url = get_object_url(logoPath)
     try:
-        cursor.execute(insert_sql,(company_id,company_name,company_website,person_in_charge,contact_number,company_email,company_password,register_status))
+        cursor.execute(insert_sql,(company_id,company_name,company_website,person_in_charge,contact_number,company_email,company_password,register_status,company_address, cert_obj_url, logo_obj_url))
         connection.commit()
         cursor.close()
         print("Successfully Registered a Company")
-        uploadToS3(cert, f"companies/{company_id}/cert.pdf")
         return True
 
     except Exception as e:
@@ -130,6 +136,20 @@ def get_job_offers_from_company_id(company_id):
     finally:    
         connection.close()
 
+def get_all_job_post():
+    connection = get_database_connection()
+    query_sql = "SELECT IO.offer_id, IO.job_title, IO.job_description, IO.allowance, IO.company_id, C.company_name, C.company_website, C.person_in_charge, C.contact_number, C.company_email, C.company_address, C.register_status, C.logo_url FROM InternshipOffer IO INNER JOIN Company C ON IO.company_id = C.company_id;"
+
+    cursor = connection.cursor()
+
+    try:
+        cursor.execute(query_sql)
+        print("Successfully Getting the Job Offers Details")
+        return cursor.fetchall()
+    except Exception as e:
+        cursor.close()
+        print(str(e))
+        return None
 
 def create_job_post(data, company_id):
     connection = get_database_connection()
@@ -161,4 +181,27 @@ def get_all_offer():
     query_sql = "SELECT * FROM InternshipOffer"
 
 
+
+def get_student_applications(company_id):
+    connection = get_database_connection()
+    sql_query = """
+    SELECT InternshipOffer.job_title, Student.student_name, InternshipApplication.application_date, Student.student_id, Student.resume_url
+    FROM InternshipOffer
+    INNER JOIN InternshipApplication ON InternshipOffer.offer_id = InternshipApplication.offer_id
+    INNER JOIN Student ON InternshipApplication.student_id = Student.student_id
+    WHERE InternshipOffer.company_id = %s;
+"""
+    cursor = connection.cursor()
+    try:
+        cursor.execute(sql_query, company_id)
+        return cursor.fetchall()
+        return True
+    
+    except Exception as e:
+        cursor.close()
+        print(str(e))
+        return None
+    
+    finally:    
+        connection.close()
 

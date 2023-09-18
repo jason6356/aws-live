@@ -304,33 +304,50 @@
                   >
                     Email
                   </th>
+                  <th
+                    class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 text-center"
+                  >
+                    Contact Number
+                  </th>
                 </tr>
               </thead>
 
               <tbody class="divide-y divide-gray-200">
+                {% for company in companies %}
                 <!-- Customzied Data-->
                 <tr>
                   <td
                     class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 text-center"
                   >
-                    Techies App Technologies Sdn Bhd
+                    <!--Techies App Technologies Sdn Bhd-->
+                    {{company[1]}}
                   </td>
                   <td class="px-4 py-2 text-gray-700 text-left">
-                    Sunway Nexis Soho, D-5-7 No.1, Jalan PJU 5/1 Dataran
+                    <!-- Sunway Nexis Soho, D-5-7 No.1, Jalan PJU 5/1 Dataran
                     Sunway,, Kota Damansara, 47810 Petaling Jaya, Selangor,
-                    47810, Selangor
+                    47810, Selangor -->
+                    {{company[8]}}
                   </td>
                   <td
                     class="whitespace-nowrap px-4 py-2 text-gray-700 text-center"
                   >
-                    https://www.google.com
+                    <!-- https://www.google.com -->
+                    {{company[1]}}
                   </td>
                   <td
                     class="whitespace-nowrap px-4 py-2 text-gray-700 text-center"
                   >
-                    companyEmail@gmail.com
+                    {{company[5]}}
+                    <!-- companyEmail@gmail.com -->
+                  </td>
+                  <td
+                    class="whitespace-nowrap px-4 py-2 text-gray-700 text-center"
+                  >
+                    {{company[4]}}
+                    <!-- companyEmail@gmail.com -->
                   </td>
                 </tr>
+                {% endfor %}
 
                 <tr>
                   <td

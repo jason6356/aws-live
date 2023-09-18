@@ -1,0 +1,33 @@
+Main_Page:
+  List 4 Portals For Each DONE
+      Student:
+        Register DONE
+        Login DONE
+      Company:
+        Register
+        Login
+      Lecturer:
+        Login
+      Admin:
+        Login
+      
+Company: Create Profile 
+  Create Job Offers
+  View Created Job Offers
+  View Applied Student with the Job_Offer_ID
+    View Resume
+
+Student: Create Profile
+  Attach Supervisor
+  Edit Profile
+  Search Internship
+  Apply Internship
+  Upload Progress Report
+
+Lecturer: Account <-- Migrated from Actual Taruc Database
+  View Student Profile, (Progress Report)
+  Logout
+
+Admin: Approve Company
+  Manage Student
+  Manage Lecturer

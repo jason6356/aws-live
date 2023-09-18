@@ -32,7 +32,8 @@ def home():
     data = admin_model.get_admin()
     print(data)
     #data = ('admin01', 'admin1', '123456')
-    return render_template('/admin/adminLogin.html', data=data)
+    #return render_template('/admin/adminLogin.html', data=data)
+    return render_template('index.html', data=data)
 
 @app.route("/addStudent", methods=['GET'])
 def renderAddStudent():

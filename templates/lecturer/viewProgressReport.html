@@ -8,10 +8,16 @@
       rel="stylesheet"
     />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
-
-    <title>Lecturer Dashboard</title>
+    <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css"
+      type="text/css"
+    />
+    <title>Upload Progression Report</title>
   </head>
   <body>
+    <!-- Top Navigation-->
     <nav
       class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700"
     >
@@ -48,7 +54,7 @@
               />
               <span
                 class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white"
-                >Lecturer</span
+                >Student</span
               >
             </a>
           </div>
@@ -64,24 +70,24 @@
                   <span class="sr-only">Open user menu</span>
                   <img
                     class="w-8 h-8 rounded-full"
-                    src="{{url_for('static', filename='admin_user.png')}}"
+                    src="{{image_url}}"
                     alt="user photo"
                   />
                 </button>
               </div>
               <div
-                class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
+                class="logo-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
                 id="dropdown-user"
               >
                 <div class="px-4 py-3" role="none">
                   <p class="text-sm text-gray-900 dark:text-white" role="none">
-                    Admin
+                    {{data[1]}}
                   </p>
                   <p
                     class="text-sm font-medium text-gray-900 truncate dark:text-gray-300"
                     role="none"
                   >
-                    admin@tarc.edu.my
+                    {{data[5]}}
                   </p>
                 </div>
                 <ul class="py-1" role="none">
@@ -125,6 +131,7 @@
       </div>
     </nav>
 
+    <!-- Sidebar-->
     <aside
       id="logo-sidebar"
       class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
@@ -134,7 +141,7 @@
         <ul class="space-y-2 font-medium">
           <li>
             <a
-              href="{{url_for('company_controller.dashboard')}}"
+              href="{{url_for('lecturer_controller.dashboard')}}"
               class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
             >
               <svg
@@ -183,93 +190,60 @@
       </div>
     </aside>
 
-    <!-- Content -->
+    <!-- Content-->
     <div class="p-4 sm:ml-64">
-      <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg mt-14">
+      <div
+        class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14"
+      >
+        <div class="mt-5">
+          <h1 class="font-bold text-3xl m-10">Report From {{student[1]}}</h1>
+        </div>
 
-        <!-- Table of Students-->
-          <h1 class="font-bold text-3xl m-10 text-gray-700"> Students</h1>
+        <!-- Table of Progression Logs-->
+        <div class="mt-5">
+          <h1 class="font-bold text-3xl m-10">Progression Logs</h1>
           <div class="overflow-x-auto">
             <table
-              class="min-w-full divide-y-2 divide-gray-200 bg-white text-sm"
+              class="min-w-full divide-y-2 divide-gray-200 bg-white text-sm table-fixed"
             >
               <thead class="ltr:text-left rtl:text-right">
                 <tr>
                   <th
                     class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 text-center"
                   >
-                    Student ID
+                    Report Name
                   </th>
                   <th
                     class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 text-center"
                   >
-                    Student Name
+                    Upload Time
                   </th>
                   <th
                     class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 text-center"
-                  >
-                   NRIC
-                  </th>
-                  <th
-                    class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 text-center"
-                  >
-                  Email
-                  </th>
-                  <th
-                    class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 text-center"
-                  >
-                  Contact Number
-                  </th>
-                  <th
-                    class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 text-center"
-                  >
-                    Actions
-                  </th>
+                  ></th>
                 </tr>
               </thead>
 
               <tbody class="divide-y divide-gray-200">
-                {% for student in students %}
+                {% for row in reports %}
+                <!-- Customzied Data-->
                 <tr>
                   <td
                     class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 text-center"
                   >
-                  {{student[0]}}
+                    {{row['key'].split('/')[2]}}
                   </td>
                   <td
                     class="whitespace-nowrap px-4 py-2 text-gray-700 text-center"
                   >
-                  {{student[1]}}
+                    {{row['last_modified']}}
                   </td>
-                  <td
-                    class="whitespace-nowrap px-4 py-2 text-gray-700 text-center"
-                  >
-                  {{student[2]}}
-                  </td>
-                  <td
-                    class="whitespace-nowrap px-4 py-2 text-gray-700 text-center"
-                  >
-                  {{student[5]}}
-                  </td>
-                  <td
-                    class="whitespace-nowrap px-4 py-2 text-gray-700 text-center"
-                  >
-                  {{student[6]}}
-                  </td>
-                  <td
-                    class="whitespace-nowrap px-4 py-2 text-gray-700 text-center"
-                  >
+                  <td class="whitespace-nowrap px-4 py-2">
                     <a
-                      href="{{student[8]}}"
-                      class="inline-block rounded bg-blue-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-700"
+                      href="{{row['url']}}"
+                      class="inline-block rounded bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-700"
                     >
-                      View Resume
-                    </a>
-                    <a
-                      href="/lecturer/viewProgressReport?student_id={{student[0]}}"
-                      class="inline-block rounded bg-green-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-700"
-                    >
-                      View ProgressReport
+                      View
                     </a>
                   </td>
                 </tr>
@@ -281,28 +255,4 @@
       </div>
     </div>
   </body>
-  <script>
-    const form = document.getElementById("create-job-post-form")
-    const apiURL = "/company/createJobPost"
-    const btn = document.getElementById("close-modal-btn")
-
-    //using xhr create post request
-    form.addEventListener("submit", (e) => {
-      e.preventDefault()
-      const formData = new FormData(form)
-      const xhr = new XMLHttpRequest()
-      xhr.open("POST", apiURL)
-      xhr.send(formData)
-      xhr.onload = () => {
-        if (xhr.status === 200) {
-          console.log(xhr.response)
-          alert("Job Post Created Successfully")
-          window.location.reload()
-        } else {
-          console.log(xhr.response)
-          alert("Job Post Creation Failed")
-        }
-      }
-    })
-  </script>
 </html>

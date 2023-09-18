@@ -283,7 +283,9 @@
               <span class="font-bold text-xl text-gray-800 ml-2"
                 >Total Applications</span
               >
-              <span class="font-bold text-3xl text-center mt-5">100</span>
+              <span class="font-bold text-3xl text-center mt-5"
+                >{{totalApplications}}</span
+              >
             </div>
           </div>
 
@@ -332,123 +334,40 @@
                   >
                     Applied Date
                   </th>
-                  <th class="px-4 py-2"></th>
                 </tr>
               </thead>
 
               <tbody class="divide-y divide-gray-200">
+                {% for row in applied %}
                 <tr>
                   <td
                     class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 text-center"
                   >
-                    John Doe
+                    {{row[0]}}
                   </td>
                   <td
                     class="whitespace-nowrap px-4 py-2 text-gray-700 text-center"
                   >
-                    24/05/1995
+                    {{row[1]}}
                   </td>
                   <td
                     class="whitespace-nowrap px-4 py-2 text-gray-700 text-center"
                   >
-                    Web Developer
+                    {{row[2]}}
                   </td>
                   <td
                     class="whitespace-nowrap px-4 py-2 text-gray-700 text-center"
                   >
-                    $120,000
+                    {{row[3]}}
                   </td>
 
                   <td
                     class="whitespace-nowrap px-4 py-2 text-gray-700 text-center"
                   >
-                    23/10/2023
-                  </td>
-                  <td class="whitespace-nowrap px-4 py-2">
-                    <button
-                      data-modal-target="defaultModal"
-                      data-modal-toggle="defaultModal"
-                      href="#"
-                      class="inline-block rounded bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-700"
-                    >
-                      View
-                    </button>
+                    {{row[4]}}
                   </td>
                 </tr>
-
-                <tr>
-                  <td
-                    class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 text-center"
-                  >
-                    Web Developer
-                  </td>
-                  <td
-                    class="whitespace-nowrap px-4 py-2 text-gray-700 text-center"
-                  >
-                    Focusing on the front end
-                  </td>
-                  <td
-                    class="whitespace-nowrap px-4 py-2 text-gray-700 text-center"
-                  >
-                    RM1000.00
-                  </td>
-                  <td
-                    class="whitespace-nowrap px-4 py-2 text-gray-700 text-center"
-                  >
-                    Intel Sdn Bhd
-                  </td>
-                  <td
-                    class="whitespace-nowrap px-4 py-2 text-gray-700 text-center"
-                  >
-                    23/10/2023
-                  </td>
-                  <td class="whitespace-nowrap px-4 py-2">
-                    <button
-                      data-modal-target="secondModal"
-                      data-modal-toggle="secondModal"
-                      href="#"
-                      class="inline-block rounded bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-700"
-                    >
-                      View
-                    </button>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td
-                    class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 text-center"
-                  >
-                    Gary Barlow
-                  </td>
-                  <td
-                    class="whitespace-nowrap px-4 py-2 text-gray-700 text-center"
-                  >
-                    24/05/1995
-                  </td>
-                  <td
-                    class="whitespace-nowrap px-4 py-2 text-gray-700 text-center"
-                  >
-                    Singer
-                  </td>
-                  <td
-                    class="whitespace-nowrap px-4 py-2 text-gray-700 text-center"
-                  >
-                    $20,000
-                  </td>
-                  <td
-                    class="whitespace-nowrap px-4 py-2 text-gray-700 text-center"
-                  >
-                    23/10/2023
-                  </td>
-                  <td class="whitespace-nowrap px-4 py-2">
-                    <a
-                      href="#"
-                      class="inline-block rounded bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-700"
-                    >
-                      View
-                    </a>
-                  </td>
-                </tr>
+                {% endfor %}
               </tbody>
             </table>
           </div>

@@ -37,6 +37,7 @@ def uploadToS3(file, path):
         print(str(e))
         return False
 
+#Sample Function to Get the Object Url
 def get_object_url(path):
 
     bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
@@ -54,6 +55,22 @@ def get_object_url(path):
     
     return object_url
 
+
+
+def list_files(student_id):
+    """List files in AWS S3 bucket"""
+    s3 = boto3.resource('s3')
+    my_bucket = s3.Bucket(custombucket)
+
+    # Key = path of the Object from bucket
+    # last_modified = last modified date of the Object
+
+    for obj in my_bucket.objects:
+        print("Object Key : " + obj.key)
+        print("Last Modified : " + obj.last_modified)
+
+
+#Sample Implementation of List Reports
 def getProgressionReports(student_id):
     s3 = boto3.resource('s3')
     my_bucket = s3.Bucket(custombucket)

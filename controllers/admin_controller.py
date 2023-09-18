@@ -4,6 +4,11 @@ from models import admin_model, student_model, lecturer_model, company_model
 
 admin_controller = Blueprint('admin_controller', __name__)
 
+#render admin login
+@admin_controller.route('/login', methods=['GET'])
+def render_login():
+    return render_template('admin/adminLogin.html')
+
 @admin_controller.route('/login', methods=['POST'])
 def login():
 

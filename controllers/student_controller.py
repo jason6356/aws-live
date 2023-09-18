@@ -2,7 +2,7 @@ from datetime import date, datetime, time
 from flask import Blueprint, redirect, render_template, request, session
 
 from config import *
-from models import student_model
+from models import student_model, company_model
 from services.database_service import get_database_connection
 from services.s3_service import uploadToS3, getProgressionReports
 from functools import wraps
@@ -28,7 +28,9 @@ def render_register():
 def dashboard():
     student_id = session['student_id']
     image_url = "https://{0}.s3.amazonaws.com/students/{1}/profile.png".format(custombucket,student_id)
-    return render_template('student/studentDashboard.html', image_url=image_url)
+    apply_internship = student_model.get_detail_applied_internships(student_id)
+    totalApplications = len(apply_internship)
+    return render_template('student/studentDashboard.html', image_url=image_url, applied=apply_internship, totalApplications=totalApplications)
 
 @student_controller.route('/search', methods=['GET'])
 @require_session
@@ -36,9 +38,14 @@ def search_internship():
     student_id = session['student_id']
     image_url = "https://{0}.s3.amazonaws.com/students/{1}/profile.png".format(custombucket,student_id)
     #Fetch All Internship Offers
+    job_offers = company_model.get_all_job_post()
+    #fetch all applied internships
+    applied_internships = student_model.get_applied_internships(student_id)
+    #map applied_internships tuple into 1d array
+    applied_internships = [x[0] for x in applied_internships]
+    print(job_offers)
 
-
-    return render_template('student/internship.html', data=[], image_url=image_url)
+    return render_template('student/internship.html', data=job_offers, image_url=image_url, applied=applied_internships)
 
 @student_controller.route('/profile', methods=['GET'])
 @require_session
@@ -112,12 +119,48 @@ def uploadProgressReport():
 def companies():
     student_id = session['student_id']
     image_url = "https://{0}.s3.amazonaws.com/students/{1}/profile.png".format(custombucket,student_id)
-    return render_template('student/companies.html', image_url=image_url, data=[])
+    companies = company_model.get_all_companies()
+    print(companies[0])
+    return render_template('student/companies.html', image_url=image_url, companies=companies, data=[])
 
 @student_controller.route('/apply', methods=['POST'])
 @require_session
 def apply_internship():
     connection = get_database_connection()
+    student_id = session['student_id']
     job_offer_id = request.form['id']
     print("job_offer_id: ", job_offer_id)
+    student_model.apply_company(student_id, job_offer_id)
+
     return 'Success'
+
+#Write a get request to navigate to student login
+@student_controller.route('/login', methods=['GET'])
+def render_login():
+    return render_template('student/studentLogin.html')
+
+#Write a post request to handle student login
+@student_controller.route('/login', methods=['POST'])
+def login():
+    studentData =  student_model.get_all_students()
+
+    if isStudentAccount(request, studentData):
+        return redirect('/student/dashboard')
+
+def isStudentAccount(request, data):
+    for row in data:
+        print(f"Student row : {row}")
+        if request.form['email'] == row[5] and request.form['password'] == row[2]:
+            session['student_id'] = row[0]
+            return True
+
+    return False
+
+#Write a register request to submite student registration
+@student_controller.route('/register', methods=['POST'])
+def register():
+    if student_model.create_student(request):
+        return redirect('/student/login')
+    else:
+        return render_template('error.html', error_msg='Unable to Delete From MariaDB')
+

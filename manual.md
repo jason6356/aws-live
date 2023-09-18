@@ -12,6 +12,10 @@
 
 ### Setting up
 
+#### Install python-dotenv
+
+> pip install python-dotenv
+
 1. Create a **.env** file in your root directory
 2. Go to AWS Console, beside the End Lab, **i Aws Details**
 3. Click the "Show" beside the **AWS CLI** : Show
@@ -24,8 +28,54 @@
    ```
    Note : This credential is to illustrate how the access keys looks like
 5. Copy and Paste this into the **.env** file
-6. And you are done!
+6. For sake of development, add a new attribute into **config.py**
+   Add isEc2Instance and set it to False
 
-### Potential Risk that will be facing
+```py
 
-- This service is not yet tested with deployment with EC2, actually
+#customhost = "database-1.cgj7jfy75lmm.us-east-1.rds.amazonaws.com"
+customhost = "internship-system.cgj7jfy75lmm.us-east-1.rds.amazonaws.com"
+customuser = "aws_user"
+custompass = "Bait3273"
+#customdb = "employee"
+customdb = "internship"
+custombucket = "lohkangsheng-employee"
+customregion = "us-east-1"
+isEc2Instance = False
+
+```
+
+### Sample Code of Using the Service
+
+```py
+
+#Note s3_service is imported via folder, because i have multiple services
+from services.s3_service import uploadToS3, getProgressionReports
+#Yours can be
+#from s3_service import uploadToS3,
+
+@student_controller.route('/uploadProgress', methods=['POST'])
+@require_session
+def uploadProgressReport():
+    file = request.files['file']
+    #check file type is pdf
+    if file.filename.split('.')[1] != 'pdf':
+        status = "Error: File is not pdf"
+        print(status)
+        return status
+
+    #Get the student id, and today's date, to generate the file
+    student_id = session['student_id']
+    now = datetime.now()
+    ts = now.timestamp()
+
+    path = f'students/{student_id}/progression_report_{ts}.pdf'
+
+    uploadToS3(file, path)
+    return "Success"
+
+```
+
+### Before Deployment
+
+- Just Enable isEc2Instance to True before push to git for Ec2 to Clone

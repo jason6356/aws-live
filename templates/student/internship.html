@@ -278,15 +278,16 @@
         <h1 class="font-bold text-3xl">Internships</h1>
 
         <div class="grid grid-cols-2 w-full justify-items-center gap-5 mt-10">
+          {% for row in data %}
           <!-- Card -->
           <div
             class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 card"
-            id="job_offer-1"
+            id="{{row[0]}}"
           >
             <a href="#">
               <img
                 class="rounded-t-lg"
-                src="{{url_for('static', filename='techlogo.png')}}"
+                src="{{row[12]}}"
                 alt="Company Image"
               />
             </a>
@@ -295,22 +296,26 @@
                 <h5
                   class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
                 >
-                  Techies App Technologies Sdn Bhd
+                  {{row[5]}}
                 </h5>
               </a>
               <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
-                <span class="font-bold text-white">Job Title</span> :Software
-                Developer (Intern)
+                <span class="font-bold text-white">Job Title</span> : {{row[1]}}
               </p>
               <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
-                <span class="font-bold text-white">Location</span> : Sunway
-                Nexis Soho, D-5-7 No.1, Jalan PJU 5/1 Dataran Sunway,, Kota
-                Damansara, 47810 Petaling Jaya, Selangor, 47810, Selangor
+                <span class="font-bold text-white">Location</span> : {{row[10]}} 
               </p>
               <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
-                <span class="font-bold text-white">Allowance</span> : RM 600.00
-                - RM 800.00
+                <span class="font-bold text-white">Allowance</span> : {{row[3]}}              </p>
               </p>
+              {% if row[0] in applied%}
+              <button
+                class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+                disabled
+              >
+                Applied
+              </button>
+              {% else %}
               <button
                 class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               >
@@ -331,113 +336,11 @@
                   />
                 </svg>
               </button>
+              {% endif %}
             </div>
           </div>
           <!-- End Card-->
-          <!-- Card -->
-          <div
-            class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 card"
-            id="job_offer-2"
-          >
-            <a href="#">
-              <img
-                class="rounded-t-lg"
-                src="{{url_for('static', filename='techlogo.png')}}"
-                alt="Company Image"
-              />
-            </a>
-            <div class="p-5">
-              <a href="#">
-                <h5
-                  class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
-                >
-                  Techies App Technologies Sdn Bhd
-                </h5>
-              </a>
-              <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
-                <span class="font-bold text-white">Job Title</span> :Software
-                Developer (Intern)
-              </p>
-              <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
-                <span class="font-bold text-white">Location</span> : Sunway
-                Nexis Soho, D-5-7 No.1, Jalan PJU 5/1 Dataran Sunway,, Kota
-                Damansara, 47810 Petaling Jaya, Selangor, 47810, Selangor
-              </p>
-              <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
-                <span class="font-bold text-white">Allowance</span> : RM 600.00
-                - RM 800.00
-              </p>
-              <button
-                class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              >
-                Apply
-                <svg
-                  class="w-3.5 h-3.5 ml-2"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 14 10"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M1 5h12m0 0L9 1m4 4L9 9"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
-          <!-- End Card-->
-          <!-- Card -->
-          <div
-            class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
-          >
-            <a href="#">
-              <img
-                class="rounded-t-lg"
-                src="/docs/images/blog/image-1.jpg"
-                alt=""
-              />
-            </a>
-            <div class="p-5">
-              <a href="#">
-                <h5
-                  class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
-                >
-                  Noteworthy technology acquisitions 2021
-                </h5>
-              </a>
-              <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
-                Here are the biggest enterprise technology acquisitions of 2021
-                so far, in reverse chronological order.
-              </p>
-              <a
-                href="#"
-                class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              >
-                Read more
-                <svg
-                  class="w-3.5 h-3.5 ml-2"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 14 10"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M1 5h12m0 0L9 1m4 4L9 9"
-                  />
-                </svg>
-              </a>
-            </div>
-          </div>
-
-          <!-- End Card-->
+          {% endfor %}
         </div>
       </div>
     </div>
