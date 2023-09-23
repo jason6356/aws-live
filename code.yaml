@@ -1,8 +1,8 @@
 Main_Page:
-  List 4 Portals For Each DONE
+  List 4 Portals For Each Role
       Student:
-        Register DONE
-        Login DONE
+        Register 
+        Login 
       Company:
         Register
         Login
@@ -29,5 +29,3 @@ Lecturer: Account <-- Migrated from Actual Taruc Database
   Logout
 
 Admin: Approve Company
-  Manage Student
-  Manage Lecturer

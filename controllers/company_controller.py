@@ -47,7 +47,10 @@ def login():
     companyData = company_model.get_all_companies()
     if isCompanyAccount(request, companyData):
         session['userType'] = 'company'
-        return redirect('/company/dashboard')
+        if session['status'] == 'requested':
+            return render_template('error.html', error_msg='Your account is not approved yet. Please wait for the admin to approve your account.')
+        else:
+            return redirect('/company/dashboard')
 
     return render_template('error.html', error_msg='Invalid Name Or Password')
 
@@ -55,7 +58,12 @@ def isCompanyAccount(request, data):
     for row in data:
         print(f"Company row : {row}")
         if request.form['email'] == row[5] and request.form['password'] == row[6]:
-            session['company_id'] = row[0]
+            if row[7] == 'approved':
+                session['status'] = 'approved'
+                session['company_id'] = row[0]
+            else:
+                session['status'] = 'requested'
+            
             return True
 
     return False
