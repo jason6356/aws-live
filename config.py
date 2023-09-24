@@ -4,6 +4,6 @@ customuser = "aws_user"
 custompass = "Bait3273"
 #customdb = "employee"
 customdb = "internship"
-custombucket = "lohkangsheng-employee"
+custombucket = "lohkangsheng-internship"
 customregion = "us-east-1"
 isEc2Instance = True

@@ -259,6 +259,22 @@ def getCompanies():
     result = company_model.get_companies_by_status()
     return jsonify(result)
 
+@app.route('/MengLeong', methods=["GET"])
+def MengLeong():
+    return render_template('ml.html')
+
+@app.route('/WeiLun', methods=["GET"])
+def WeiLun():
+    return render_template('wl.html')
+
+@app.route('/JengLiang', methods=["GET"])
+def JengLiang():
+    return render_template('jl.html')
+
+@app.route('/KangSheng', methods=["GET"])
+def KangSheng():
+    return render_template('ks.html')
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
 
